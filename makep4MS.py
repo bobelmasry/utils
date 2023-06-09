@@ -7,7 +7,7 @@ import os
 
 root = Tk()
 filetypes = [("PDF Files", "*.pdf")]
-startPage = 0 #Default is 1
+startPage = 0 #Default is 0
 subject = 'phy'
 
 popplerPath = r'C:\Users\donat\Documents\python_projects\js_test\poppler-22.12.0\Library\bin'
