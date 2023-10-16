@@ -4,17 +4,21 @@ from PyPDF2 import PdfReader
 from tkinter import *
 from tkinter import filedialog
 import os
+import json
 
 paperNumber = 4
+start = 1
 subject = 'phy'
 subject2 = 'physics'
 level = 'A2'
+db = open(f'{subject}_db_p{paperNumber}.json', 'w')
+db.write("[")
 
-current_question_num = 0
+current_question_num = 1
 
 root = Tk()
 filetypes = [("PDF Files", "*.pdf")]
-startPage = 2  # Default is 0
+startPage = 0  # Default is 0
 startPixel = 180  # Default is 180
 
 popplerPath = r'C:\Users\donat\Documents\python_projects\js_test\poppler-22.12.0\Library\bin'
@@ -115,7 +119,24 @@ for m in range(len(files)):
         end_y = get_dimensions(f"final{m}.jpg", current_y, stop_value)
         take_screenshot(current_y, end_y, current_question_num, f"final{m}.jpg")
         current_y = end_y
-        current_question_num += 1
+        if os.path.isfile(f"C:\\Users\\donat\\Documents\\python_projects\\js_test\\Classified\\makep4new\\images\\questions\\{subject}_{current_question_num}.jpg") == True:
+            answerObject = {
+            "questionName" : f"{subject}_{current_question_num}",
+            "questionNum" : current_question_num - start + 1,
+            "Subject":subject2,
+            "Level":level,
+            "paperNumber":paperNumber,
+            "pdfName":files[m][-18:]
+            }
+            answerObjectFormatted = json.dumps(answerObject)
+            db.write(answerObjectFormatted)
+            db.write(""",
+""")
+            current_question_num += 1
+    start = current_question_num
 
     questions_array = os.listdir(f"{output1Path}/questions")
-    clean_images()
+    #clean_images()
+
+db.write("]")
+db.close()
